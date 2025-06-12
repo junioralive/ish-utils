@@ -12,7 +12,7 @@ If you're here looking for reusable utils, clean code, or documentation… oh bu
 
 Because I needed a place to:
 
-- Store a token that updates every hour (yes, *every* hour)
+- Store a token that updates every 6 hour (yes, *every* 6 hour)
 - Test weird ideas I don't want cluttering `ish`
 - Confuse future-me
 
