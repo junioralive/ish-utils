@@ -1,0 +1,48 @@
+name: Token Update
+
+on:
+  push:
+    branches:
+      - main
+  repository_dispatch:
+  workflow_dispatch:
+
+jobs:
+  extract-token:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install playwright pyvirtualdisplay
+          python -m playwright install chromium
+
+      - name: Create python script
+        run: |
+          echo "$UPDATE_TOKEN" > temp_script.py
+        env:
+          UPDATE_TOKEN: ${{ secrets.UPDATE_TOKEN }}
+
+      - name: Run temp script
+        run: python temp_script.py
+
+      - name: Commit files
+        run: |
+          git config --local user.email ${{ secrets.MY_GIT_EMAIL }}
+          git config --local user.name "junioralive"
+          git add config.json
+          git commit -m "Updated Token" -a || echo "No changes to commit"
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
