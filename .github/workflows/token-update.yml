@@ -6,6 +6,8 @@ on:
       - main
   repository_dispatch:
   workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
 
 jobs:
   extract-token:
